@@ -1,0 +1,17 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "738858PTUU.de.hemmer.rezeptbuch"
+        ],
+        "components": [
+          {
+            "/": "/einladung*",
+            "comment": "Einladung in ein Kochbuch"
+          }
+        ]
+      }
+    ]
+  }
+}

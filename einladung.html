@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Einladung zu Rezeptly</title>
+<!-- Von Hand gepflegt (nicht von build:legal erzeugt), E-044. Der Code steht hinter #
+     und wird deshalb nie an den Webserver geschickt. -->
+<style>
+  body { margin: 0; background: #FBF7F2; color: #2B2420; font: 17px/1.55 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  main { max-width: 520px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 1.7em; line-height: 1.25; }
+  a { color: #B5562F; }
+  .code { font-size: 1.6em; font-weight: 700; letter-spacing: 0.08em; background: #fff; border: 1px solid #E6DDD3; border-radius: 12px; padding: 14px 16px; text-align: center; margin: 20px 0 12px; }
+  .button { display: block; text-align: center; text-decoration: none; font-weight: 700; border-radius: 12px; padding: 14px 16px; margin: 12px 0; border: 0; width: 100%; font-size: 1em; cursor: pointer; }
+  .primary { background: #B5562F; color: #fff; }
+  .secondary { background: #fff; color: #B5562F; border: 1px solid #E6DDD3; }
+  .hint { color: #6B5F57; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+<h1>Einladung zu einem Kochbuch</h1>
+<div id="ok" hidden>
+  <p>Du wurdest in ein gemeinsames Kochbuch in der App Rezeptly eingeladen.</p>
+  <div class="code" id="code"></div>
+  <a class="button primary" id="open" href="#">In Rezeptly öffnen</a>
+  <button class="button secondary" id="copy" type="button">Code kopieren</button>
+  <p class="hint">Klappt das Öffnen nicht? Kopiere den Code, öffne Rezeptly und tippe in den Kochbüchern auf „Mit Code beitreten“.</p>
+  <p class="hint">Noch kein Rezeptly? Installiere die App zuerst und öffne danach diesen Link noch einmal.</p>
+</div>
+<p id="bad" hidden>In diesem Link steckt kein gültiger Einladungscode. Bitte frag nach einer neuen Einladung.</p>
+</main>
+<script>
+  (function () {
+    var code = decodeURIComponent(location.hash.slice(1)).replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+    if (!/^[A-HJ-NP-Z2-9]{12}$/.test(code)) {
+      document.getElementById('bad').hidden = false;
+      return;
+    }
+    var pretty = code.match(/.{4}/g).join('-');
+    document.getElementById('ok').hidden = false;
+    document.getElementById('code').textContent = pretty;
+    document.getElementById('open').href = 'rezeptbuch://collections/join?code=' + code;
+    var copy = document.getElementById('copy');
+    copy.addEventListener('click', function () {
+      if (!navigator.clipboard) return;
+      navigator.clipboard.writeText(pretty).then(function () { copy.textContent = 'Kopiert'; });
+    });
+  })();
+</script>
+</body>
+</html>
