@@ -4,34 +4,32 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
+<meta name="theme-color" content="#F4FAF3">
 <title>Einladung zu Rezeptly</title>
-<!-- Von Hand gepflegt (nicht von build:legal erzeugt), E-044. Der Code steht hinter #
-     und wird deshalb nie an den Webserver geschickt. -->
-<style>
-  body { margin: 0; background: #FBF7F2; color: #2B2420; font: 17px/1.55 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-  main { max-width: 520px; margin: 0 auto; padding: 32px 16px 48px; }
-  h1 { font-size: 1.7em; line-height: 1.25; }
-  a { color: #B5562F; }
-  .code { font-size: 1.6em; font-weight: 700; letter-spacing: 0.08em; background: #fff; border: 1px solid #E6DDD3; border-radius: 12px; padding: 14px 16px; text-align: center; margin: 20px 0 12px; }
-  .button { display: block; text-align: center; text-decoration: none; font-weight: 700; border-radius: 12px; padding: 14px 16px; margin: 12px 0; border: 0; width: 100%; font-size: 1em; cursor: pointer; }
-  .primary { background: #B5562F; color: #fff; }
-  .secondary { background: #fff; color: #B5562F; border: 1px solid #E6DDD3; }
-  .hint { color: #6B5F57; }
-  [hidden] { display: none !important; }
-</style>
+<!-- Von Hand gepflegt (nicht von build:legal erzeugt), E-044; Aussehen aus assets/site.css (E-053).
+     Der Code steht hinter # und wird deshalb nie an den Webserver geschickt. -->
+<link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
-<main>
-<h1>Einladung zu einem Kochbuch</h1>
-<div id="ok" hidden>
-  <p>Du wurdest in ein gemeinsames Kochbuch in der App Rezeptly eingeladen.</p>
-  <div class="code" id="code"></div>
-  <a class="button primary" id="open" href="#">In Rezeptly öffnen</a>
-  <button class="button secondary" id="copy" type="button">Code kopieren</button>
-  <p class="hint">Klappt das Öffnen nicht? Kopiere den Code, öffne Rezeptly und tippe in den Kochbüchern auf „Mit Code beitreten“.</p>
-  <p class="hint">Noch kein Rezeptly? Installiere die App zuerst und öffne danach diesen Link noch einmal.</p>
+<main class="invite">
+<a class="brand" href="index.html"><span class="logo" aria-hidden="true">R</span><b>Rezeptly</b></a>
+<div class="invite-card">
+  <div class="stripe" aria-hidden="true"><span style="background:var(--basil)"></span><span style="background:var(--tomato)"></span><span style="background:#FFD84D"></span></div>
+  <div class="inner">
+    <span class="badge b-basil" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg></span>
+    <h1>Einladung zu einem Kochbuch</h1>
+    <div id="ok" hidden style="display:flex;flex-direction:column;gap:14px">
+      <p class="muted">Du wurdest in ein gemeinsames Kochbuch in der App Rezeptly eingeladen.</p>
+      <div class="code" id="code" aria-label="Einladungscode"></div>
+      <a class="btn btn-primary" id="open" href="#">In Rezeptly öffnen</a>
+      <button class="btn btn-secondary" id="copy" type="button"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg><span id="copy-label">Code kopieren</span></button>
+    </div>
+    <p id="bad" hidden class="note note-warn">In diesem Link steckt kein gültiger Einladungscode. Bitte frag nach einer neuen Einladung.</p>
+  </div>
 </div>
-<p id="bad" hidden>In diesem Link steckt kein gültiger Einladungscode. Bitte frag nach einer neuen Einladung.</p>
+<p class="note note-ok">Klappt das Öffnen nicht? Kopiere den Code, öffne Rezeptly und tippe in den Kochbüchern auf „Mit Code beitreten“.</p>
+<p class="muted" style="font-size:15px">Noch kein Rezeptly? <a href="index.html" style="font-weight:700">Hier erfährst du mehr</a> und lädst die App. Öffne danach diesen Link noch einmal.</p>
+<nav aria-label="Rechtliches" style="display:flex;gap:16px;justify-content:center;font-size:14px;padding-top:8px"><a href="impressum.html" class="muted">Impressum</a><a href="datenschutz.html" class="muted">Datenschutz</a><a href="support.html" class="muted">Hilfe</a></nav>
 </main>
 <script>
   (function () {
@@ -47,7 +45,7 @@
     var copy = document.getElementById('copy');
     copy.addEventListener('click', function () {
       if (!navigator.clipboard) return;
-      navigator.clipboard.writeText(pretty).then(function () { copy.textContent = 'Kopiert'; });
+      navigator.clipboard.writeText(pretty).then(function () { document.getElementById('copy-label').textContent = 'Kopiert'; });
     });
   })();
 </script>
