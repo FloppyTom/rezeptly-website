@@ -52,7 +52,7 @@ section.band { padding: 56px 0; }
 .btn-secondary { background: var(--surface); color: var(--basil); border: 1.5px solid var(--control); }
 .btn-light { background: var(--surface); color: var(--basil); }
 .btn-small { min-height: 44px; padding: 0 16px; font-size: 16px; }
-.soon { display: inline-flex; align-items: center; min-height: 52px; padding: 0 20px; border-radius: 16px; background: var(--lemon-soft); color: var(--lemon-ink); font-weight: 800; }
+.soon { display: inline-flex; align-items: center; justify-content: center; text-align: center; line-height: 1.3; min-height: 52px; padding: 8px 20px; border-radius: 16px; background: var(--lemon-soft); color: var(--lemon-ink); font-weight: 800; }
 .actions { display: flex; gap: 12px; flex-wrap: wrap; }
 
 /* Startseite im Stil der Instagram-Beiträge (E-091): grüne Bühne, schräge Handys mit echten
