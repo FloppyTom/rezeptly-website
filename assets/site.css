@@ -61,6 +61,8 @@ section.band { padding: 56px 0; }
 .hero h1 { font-weight: 800; font-size: clamp(38px, 6vw, 64px); line-height: 1.04; letter-spacing: -.02em; }
 .hero .lead { font-size: 20px; line-height: 1.5; color: var(--muted); max-width: 540px; }
 .trust { font-size: 15px; color: var(--muted); }
+/* Der Kernsatz aus dem Pitch: hebt sich als Zitat mit Tomaten-Strich ab */
+.catch { max-width: 540px; padding: 4px 0 4px 16px; border-left: 4px solid var(--tomato); font: 700 19px/1.45 var(--body); color: var(--ink); }
 .hero-art { flex: 0 1 360px; margin: 0 auto; display: flex; justify-content: center; }
 /* Startseite der App wie in der Designvorlage (SPEC 21/22) */
 .phone { width: 330px; max-width: 100%; border-radius: 44px; background: var(--bg); border: 1.5px solid #C9D6CB; box-shadow: 0 24px 60px rgba(23, 48, 31, .12); padding: 34px 16px 22px; display: flex; flex-direction: column; gap: 12px; overflow: hidden; }
