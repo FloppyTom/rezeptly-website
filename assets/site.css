@@ -153,8 +153,17 @@ article.doc p { margin: 0 0 12px; line-height: 1.6; overflow-wrap: anywhere; }
 .code { text-align: center; font: 800 clamp(20px, 6.4vw, 28px)/1 var(--body); letter-spacing: .08em; white-space: nowrap; padding: 16px; border-radius: 16px; background: var(--sunken); border: 1.5px dashed var(--control); }
 .invite .btn { width: 100%; }
 [hidden] { display: none !important; }
+/* Rundgang-Video (E-093): Hochformat 9:16, startet stumm mit Untertiteln im Bild */
+.tour .wrap { display: grid; grid-template-columns: 1fr auto; gap: 56px; align-items: center; }
+.tour .wrap > div { display: flex; flex-direction: column; gap: 14px; }
+.tour video { display: block; width: 300px; aspect-ratio: 9 / 16; height: auto; border-radius: 28px; background: var(--basil); box-shadow: 0 26px 60px rgba(23, 48, 31, .3); }
+.chapters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.chapters span { padding: 6px 12px; border-radius: 999px; background: var(--basil-soft); color: var(--basil-ink); font-weight: 700; font-size: 15px; }
+.ai-note { font-size: 14px; color: var(--muted); }
 
 @media (max-width: 860px) {
+  .tour .wrap { grid-template-columns: 1fr; gap: 28px; justify-items: center; }
+  .tour video { width: min(300px, 80vw); }
   .hero .wrap, .split { grid-template-columns: 1fr; }
   .hero .wrap { padding-top: 20px; gap: 8px; }
   .hero-text { padding-bottom: 8px; }
