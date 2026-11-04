@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#F4FAF3">
+<title>E-Mail bestätigt – Rezeptly</title>
+<!-- Von Hand gepflegt (nicht von build:legal erzeugt), E-101. Ziel des Links in der
+     Bestätigungs-Mail: Supabase hat die Adresse schon bestätigt, bevor es hierher weiterleitet.
+     Der Code in der Adresse nützt nur zusammen mit dem Prüfwert auf dem Handy (PKCE, E-069);
+     die Seite schickt ihn nirgendwohin, sie reicht ihn nur an die App weiter. -->
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<main class="invite">
+<a class="brand" href="index.html"><img class="logo" src="assets/logo-128.png" width="38" height="38" alt=""><b>Rezeptly</b></a>
+<div class="invite-card">
+  <div class="stripe" aria-hidden="true"><span style="background:var(--basil)"></span><span style="background:var(--tomato)"></span><span style="background:#FFD84D"></span></div>
+  <div class="inner">
+    <span class="badge b-basil" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+    <div id="ok" hidden style="display:flex;flex-direction:column;gap:14px">
+      <h1>E-Mail-Adresse bestätigt</h1>
+      <p class="muted">Danke! Dein Konto bei Rezeptly ist jetzt aktiv. Öffne die App und melde dich mit deiner E-Mail-Adresse und deinem Passwort an.</p>
+      <a class="btn btn-primary" id="open" href="rezeptbuch://">Rezeptly öffnen</a>
+    </div>
+    <div id="bad" hidden style="display:flex;flex-direction:column;gap:14px">
+      <h1>Link nicht mehr gültig</h1>
+      <p class="note note-warn">Dieser Link ist abgelaufen oder wurde schon benutzt. Ist deine Adresse schon bestätigt, melde dich einfach in der App an. Sonst registriere dich in der App noch einmal mit derselben Adresse – du bekommst dann eine neue Mail.</p>
+      <a class="btn btn-secondary" id="open-bad" href="rezeptbuch://">Rezeptly öffnen</a>
+    </div>
+  </div>
+</div>
+<p class="note note-ok">Du liest das am Computer? Dann ist alles erledigt – öffne Rezeptly einfach auf deinem Handy und melde dich an.</p>
+<nav aria-label="Rechtliches" style="display:flex;gap:16px;justify-content:center;font-size:14px;padding-top:8px"><a href="impressum.html" class="muted">Impressum</a><a href="datenschutz.html" class="muted">Datenschutz</a><a href="support.html" class="muted">Hilfe</a></nav>
+</main>
+<script>
+  (function () {
+    var params = new URLSearchParams(location.search);
+    new URLSearchParams(location.hash.slice(1)).forEach(function (v, k) { params.set(k, v); });
+    // Nur die eigenen App-Varianten (App-Schemata aus app.config.ts)
+    var app = ['rezeptbuch', 'rezeptbuch-preview', 'rezeptbuch-development'].indexOf(params.get('app')) >= 0 ? params.get('app') : 'rezeptbuch';
+    if (params.get('error') || params.get('error_code')) {
+      document.getElementById('bad').hidden = false;
+      document.getElementById('open-bad').href = app + '://';
+      document.title = 'Link nicht mehr gültig – Rezeptly';
+      return;
+    }
+    document.getElementById('ok').hidden = false;
+    var code = params.get('code');
+    // Auf demselben Handy meldet die App direkt an; sonst zeigt sie „melde dich einfach an“
+    if (code && /^[A-Za-z0-9-]{8,200}$/.test(code)) {
+      var flow = params.get('sb_flow_id');
+      document.getElementById('open').href = app + '://auth/callback?code=' + encodeURIComponent(code) +
+        (flow && /^[A-Za-z0-9-]{8,200}$/.test(flow) ? '&sb_flow_id=' + encodeURIComponent(flow) : '');
+    } else {
+      document.getElementById('open').href = app + '://';
+    }
+    // Code nicht in der Adresszeile stehen lassen (Verlauf, Teilen)
+    history.replaceState(null, '', location.pathname);
+  })();
+</script>
+</body>
+</html>
