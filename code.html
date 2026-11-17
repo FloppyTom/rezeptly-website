@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#F4FAF3">
+<title>Rezept-Code für Rezeptly</title>
+<!-- Von Hand gepflegt (nicht von build:legal erzeugt), E-137; Aussehen aus assets/site.css (E-053).
+     Der Code steht hinter # und wird deshalb nie an den Webserver geschickt. Kein Abruf von Rezeptdaten. -->
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<main class="invite">
+<a class="brand" href="index.html"><img class="logo" src="assets/logo-128.png" width="38" height="38" alt=""><b>Rezeptly</b></a>
+<div class="invite-card">
+  <div class="stripe" aria-hidden="true"><span style="background:var(--basil)"></span><span style="background:var(--tomato)"></span><span style="background:#FFD84D"></span></div>
+  <div class="inner">
+    <span class="badge b-basil" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a2 2 0 0 0 2-2h14a2 2 0 0 0 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 0-2 2H5a2 2 0 0 0-2-2v-2a2 2 0 0 0 0-4z"/><path d="M9 12l2 2 4-4"/></svg></span>
+    <h1>Ein Rezept für dich</h1>
+    <div id="ok" hidden style="display:flex;flex-direction:column;gap:14px">
+      <p class="muted">Mit diesem Code holst du dir das Rezept kostenlos in die App Rezeptly – als eigene Kopie, die du ändern kannst.</p>
+      <div class="code" id="code" aria-label="Rezept-Code"></div>
+      <a class="btn btn-primary" id="open" href="#">In Rezeptly öffnen</a>
+      <button class="btn btn-secondary" id="copy" type="button"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg><span id="copy-label">Code kopieren</span></button>
+    </div>
+    <p id="bad" hidden class="note note-warn">In diesem Link steckt kein Rezept-Code. Frag bei der Person nach, die ihn geteilt hat, oder gib den Code in Rezeptly unter „Neues Rezept → Mit Code“ ein.</p>
+  </div>
+</div>
+<p class="note note-ok">Klappt das Öffnen nicht? Kopiere den Code, öffne Rezeptly und tippe auf „Neues Rezept → Mit Code“.</p>
+<p class="muted" style="font-size:15px">Noch kein Rezeptly? <a href="index.html" style="font-weight:700">Hier erfährst du mehr</a> und lädst die App. Öffne danach diesen Link noch einmal.</p>
+<nav aria-label="Rechtliches" style="display:flex;gap:16px;justify-content:center;font-size:14px;padding-top:8px"><a href="impressum.html" class="muted">Impressum</a><a href="datenschutz.html" class="muted">Datenschutz</a><a href="support.html" class="muted">Hilfe</a></nav>
+</main>
+<script>
+  (function () {
+    var raw = '';
+    try { raw = decodeURIComponent(location.hash.slice(1)); } catch (e) { raw = ''; }
+    var code = raw.trim().replace(/\s+/g, '-').toUpperCase().replace(/[^A-Z0-9-]/g, '');
+    var key = code.replace(/-/g, '');
+    if (key.length < 4 || key.length > 20) {
+      document.getElementById('bad').hidden = false;
+      return;
+    }
+    document.getElementById('ok').hidden = false;
+    document.getElementById('code').textContent = code;
+    document.getElementById('open').href = 'rezeptbuch://recipe/redeem?code=' + encodeURIComponent(code);
+    document.getElementById('copy').addEventListener('click', function () {
+      if (!navigator.clipboard) return;
+      navigator.clipboard.writeText(code).then(function () { document.getElementById('copy-label').textContent = 'Kopiert'; });
+    });
+  })();
+</script>
+</body>
+</html>

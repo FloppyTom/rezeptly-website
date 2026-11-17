@@ -9,6 +9,10 @@
           {
             "/": "/einladung*",
             "comment": "Einladung in ein Kochbuch"
+          },
+          {
+            "/": "/code*",
+            "comment": "Rezept-Code"
           }
         ]
       }
