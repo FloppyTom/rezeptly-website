@@ -36,7 +36,10 @@
 </main>
 <script>
   (function () {
-    var code = decodeURIComponent(location.hash.slice(1)).replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+    // Kaputter Link (z. B. „%E0%A4%A“): Hinweis statt leerer Seite (QA-4)
+    var raw = '';
+    try { raw = decodeURIComponent(location.hash.slice(1)); } catch (e) { raw = ''; }
+    var code = raw.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
     if (!/^[A-HJ-NP-Z2-9]{12}$/.test(code)) {
       document.getElementById('bad').hidden = false;
       return;
