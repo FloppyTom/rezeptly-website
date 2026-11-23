@@ -90,8 +90,10 @@
     if (project.localOnly && LOCAL_HOSTS.indexOf(String(pageHostname)) === -1) return { ok: false };
     if (url.pathname !== '/auth/v1/verify' || url.searchParams.get('type') !== 'recovery') return { ok: false };
     var token = url.searchParams.get('token') || '';
-    // Bei PKCE stellt Supabase dem Wert „pkce_“ voran; verifyOtp braucht ihn ohne
-    var tokenHash = token.replace(/^pkce_/, '');
+    // Bei PKCE stellt Supabase dem Wert „pkce_“ voran. Der Server sucht genau diesen Wert
+    // (verifyTokenHash, exakter Vergleich) – also unverändert weitergeben (Fehler vom 23.11.:
+    // ohne Vorsilbe kam „Link nicht mehr gültig“).
+    var tokenHash = token;
     if (!/^[A-Za-z0-9_-]{16,200}$/.test(tokenHash)) return { ok: false };
 
     var appLink = null;
