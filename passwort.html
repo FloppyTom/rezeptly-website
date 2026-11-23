@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#F4FAF3">
+<title>Neues Passwort – Rezeptly</title>
+<!-- Von Hand gepflegt (nicht von build:legal erzeugt), E-150. Ziel des Links in der Mail
+     „Passwort zurücksetzen“: https://rezeptly.app/passwort#<Bestätigungslink von Supabase>.
+     Logik in assets/passwort.js. Die Seite schickt nur an Supabase (öffentlicher Schlüssel). -->
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  .col { display: flex; flex-direction: column; gap: 14px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { font-weight: 700; }
+  .field input { font: inherit; min-height: 52px; padding: 0 14px; border-radius: 14px; border: 1.5px solid var(--control); background: var(--surface); color: var(--ink); width: 100%; }
+  .field input[aria-invalid="true"] { border-color: var(--tomato); }
+  .field .err { color: var(--tomato-ink); font-size: 15px; }
+  .hint { font-size: 15px; }
+  .note-err { background: var(--tomato-soft); color: var(--tomato-ink); }
+  .or { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 15px; }
+  .or::before, .or::after { content: ""; flex: 1; border-top: 1px solid var(--border); }
+  .btn[disabled] { opacity: .6; cursor: default; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main class="invite">
+<a class="brand" href="index.html"><img class="logo" src="assets/logo-128.png" width="38" height="38" alt=""><b>Rezeptly</b></a>
+<div class="invite-card">
+  <div class="stripe" aria-hidden="true"><span style="background:var(--basil)"></span><span style="background:var(--tomato)"></span><span style="background:#FFD84D"></span></div>
+  <div class="inner">
+    <div id="form-view" class="col" hidden>
+      <span class="badge b-basil" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
+      <h1>Neues Passwort</h1>
+      <p class="muted" id="form-intro">Lege jetzt ein neues Passwort für Rezeptly fest.</p>
+      <form id="form" class="col" novalidate>
+        <div class="field">
+          <label for="pw">Neues Passwort</label>
+          <input id="pw" name="password" type="password" autocomplete="new-password" aria-describedby="pw-hint pw-err" required>
+          <span class="muted hint" id="pw-hint">Mindestens 8 Zeichen, mit Buchstaben und Ziffer.</span>
+          <span class="err" id="pw-err" hidden></span>
+        </div>
+        <div class="field">
+          <label for="pw2">Passwort wiederholen</label>
+          <input id="pw2" name="passwordRepeat" type="password" autocomplete="new-password" aria-describedby="pw2-err" required>
+          <span class="err" id="pw2-err" hidden></span>
+        </div>
+        <p class="note note-err" id="form-err" role="alert" hidden></p>
+        <button class="btn btn-primary" id="save" type="submit">Passwort speichern</button>
+      </form>
+      <!-- Zweitweg wie bisher (App). Nur antippen, wenn die App auf diesem Handy ist: sonst ist der Link danach verbraucht. -->
+      <div id="app-choice" class="col" hidden>
+        <p class="or">oder</p>
+        <p class="muted hint">Rezeptly ist auf diesem Handy installiert? Dann kannst du das Passwort auch in der App festlegen.</p>
+        <a class="btn btn-secondary" id="open-app" href="#">In der App öffnen</a>
+      </div>
+    </div>
+
+    <div id="done-view" class="col" hidden>
+      <span class="badge b-basil" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+      <h1>Passwort gespeichert</h1>
+      <p class="muted">Dein neues Passwort gilt ab sofort. Öffne Rezeptly und melde dich mit deiner E-Mail-Adresse und dem neuen Passwort an.</p>
+      <a class="btn btn-primary" id="open-done" href="rezeptbuch://" hidden>Rezeptly öffnen</a>
+    </div>
+
+    <div id="bad-view" class="col" hidden>
+      <span class="badge b-tomato" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg></span>
+      <h1>Link nicht mehr gültig</h1>
+      <p class="note note-warn">Dieser Link ist abgelaufen, wurde schon benutzt oder ist unvollständig. Fordere in der App unter „Passwort vergessen“ einfach einen neuen an. Der Link gilt eine Stunde.</p>
+    </div>
+  </div>
+</div>
+<p class="note note-ok" id="pc-note" hidden>Du kannst das Passwort hier am Computer festlegen. Danach meldest du dich in der App auf dem Handy mit dem neuen Passwort an.</p>
+<nav aria-label="Rechtliches" style="display:flex;gap:16px;justify-content:center;font-size:14px;padding-top:8px"><a href="impressum.html" class="muted">Impressum</a><a href="datenschutz.html" class="muted">Datenschutz</a><a href="support.html" class="muted">Hilfe</a></nav>
+</main>
+<script src="assets/passwort.js"></script>
+<script>
+  (function () {
+    var P = window.RezeptlyPasswort;
+    var $ = function (id) { return document.getElementById(id); };
+    var link = P.readRecoveryLink(location.hash, location.hostname);
+    // Code nicht in der Adresszeile stehen lassen (Verlauf, Teilen)
+    history.replaceState(null, '', location.pathname);
+
+    function show(view) {
+      ['form-view', 'done-view', 'bad-view'].forEach(function (id) { $(id).hidden = id !== view; });
+      $('pc-note').hidden = !(view === 'form-view' && !mobile);
+    }
+    var mobile = P.isMobile(navigator.userAgent, navigator.maxTouchPoints);
+
+    if (!link.ok) {
+      document.title = 'Link nicht mehr gültig – Rezeptly';
+      show('bad-view');
+      return;
+    }
+    show('form-view');
+    if (mobile && link.appLink) {
+      $('app-choice').hidden = false;
+      $('open-app').href = link.appLink;
+    }
+
+    var accessToken = null; // nach dem Tausch für weitere Versuche aufheben (der Code gilt nur einmal)
+    var busy = false;
+
+    function fieldError(field, message) {
+      var input = field === 'password' ? $('pw') : $('pw2');
+      var err = field === 'password' ? $('pw-err') : $('pw2-err');
+      input.setAttribute('aria-invalid', message ? 'true' : 'false');
+      err.textContent = message || '';
+      err.hidden = !message;
+    }
+    function clearErrors() {
+      fieldError('password', null);
+      fieldError('passwordRepeat', null);
+      $('form-err').hidden = true;
+    }
+    function handle(error) {
+      if (error.kind === 'expired') { show('bad-view'); return; }
+      if (error.kind === 'field') { fieldError('password', error.message); $('pw').focus(); return; }
+      $('form-err').textContent = error.message;
+      $('form-err').hidden = false;
+    }
+    function setBusy(on) {
+      busy = on;
+      $('save').disabled = on;
+      $('save').textContent = on ? 'Wird gespeichert …' : 'Passwort speichern';
+    }
+
+    $('form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      if (busy) return;
+      clearErrors();
+      var password = $('pw').value;
+      var invalid = P.validatePasswords(password, $('pw2').value);
+      if (invalid) {
+        fieldError(invalid.field, invalid.message);
+        (invalid.field === 'password' ? $('pw') : $('pw2')).focus();
+        return;
+      }
+      setBusy(true);
+      var session = accessToken
+        ? Promise.resolve({ ok: true, accessToken: accessToken })
+        : P.verifyRecovery(fetch.bind(window), link);
+      session
+        .then(function (verified) {
+          if (!verified.ok) return verified;
+          accessToken = verified.accessToken;
+          return P.savePassword(fetch.bind(window), link, accessToken, password);
+        })
+        .then(function (result) {
+          setBusy(false);
+          if (!result.ok) { handle(result.error); return; }
+          P.signOutHere(fetch.bind(window), link, accessToken);
+          accessToken = null;
+          $('pw').value = '';
+          $('pw2').value = '';
+          if (mobile) {
+            $('open-done').href = P.appSchemeOf(link.appLink) + '://';
+            $('open-done').hidden = false;
+          }
+          document.title = 'Passwort gespeichert – Rezeptly';
+          show('done-view');
+        });
+    });
+  })();
+</script>
+</body>
+</html>
